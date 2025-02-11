@@ -1,6 +1,6 @@
 function Footer() {
 
-  console.log("Se renderizo el componente Footer");
+  // console.log("Se renderizo el componente Footer");
 
   return (
     <div className="flex justify-between py-4 px-8 text-stone-300 bg-green-800">

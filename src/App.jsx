@@ -2,6 +2,7 @@ import './App.css'
 import Navbar from './Navbar'
 import Body from './Body'
 import Footer from './Footer'
+import { useState } from 'react'
 
 const libros = [
   {
@@ -67,18 +68,23 @@ const libros = [
 ];
 
 function App() {
+  const [search,setSearch] = useState("");
 
   console.log("Se renderizo el componente App");
 
+  function handleSearchChange(e) {
+    setSearch(e.target.value);
+  }
 
   return (
     <>
     <div>
-      <Navbar></Navbar>
-      <Body books={libros}></Body>
+      <Navbar search={search} handleSearchChange={handleSearchChange}></Navbar>
+      <Body books={libros} search={search}></Body>
       <Footer></Footer>
     </div>
     </>
   ) 
 }
+
 export default App;
