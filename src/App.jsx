@@ -1,75 +1,50 @@
 import "./App.css";
-import Navbar from "./Navbar";
-import Body from "./Body";
-import Footer from "./Footer";
-import { useEffect, useState } from "react";
+import Home from "./pages/Home";
+import Agents from "./pages/Agents";
+import NotFound from "./pages/NotFound";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import StandardLayout from "./layouts/StandardLayout";
+import SecondLayout from "./layouts/SecondLayout";
+import Details from "./pages/Details";
 
-
-async function fetchApi(url) {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching data", error);
-  }
-}
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <StandardLayout />,
+    children: [
+      {
+        path: "",
+        element: <Home />,
+      },
+      {
+        path: "/home",
+        element: <Home />,
+      },
+      { path: "agents", 
+        element: <Agents /> 
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <SecondLayout />,
+    children: [
+      {
+        path: "details",
+        element: <Details />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
+  },
+]);
 
 function App() {
-  const [search, setSearch] = useState("");
-  const [products, setProducts] = useState([]);
-
-  console.log("Productos", products);
-
-  function handleSearchChange(e) {
-    setSearch(e.target.value);
-  }
-
-  function handleFavorite(id) {
-    const newProducts = products.map((product) => {
-      if (product.id === id) {
-        return { ...product, isStarred: !product.isStarred };
-      }
-      return product;
-    });
-
-    setProducts(newProducts);
-  }
-
-  useEffect(() => {
-    const initProducts = async () => {
-      
-      const data = await fetchApi("https://fakestoreapi.com/products");
-      const newProducts = data.map((p) => {
-        return {
-          ...p,
-          isStarred: false,
-        };
-      });
-      setProducts(newProducts);
-
-    };
-
-    initProducts();
-  }, []);
-
-  //loadSkeletons -> Cargar Esqueletos
-  //Grid - Flex -> Importancia en el espacio a disponer
-
   return (
     <>
-      <div>
-        <Navbar
-          search={search}
-          handleSearchChange={handleSearchChange}
-        ></Navbar>
-        <Body
-          products={products}
-          search={search}
-          handleFavorite={handleFavorite}
-        ></Body>
-        <Footer></Footer>
-      </div>
+      <RouterProvider router={router}></RouterProvider>
     </>
   );
 }
